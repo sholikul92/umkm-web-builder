@@ -3,18 +3,11 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
 
 const adapter = new PrismaPg({
-  connecctionString: process.env.DATABASE_URL!,
+  connectionString: process.env.DATABASE_URL!,
 });
 
-declare global {
-  var __prisma__: PrismaClient | undefined;
-}
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
-const db = global.__prisma__ ?? new PrismaClient({ adapter });
+export const prisma = globalForPrisma.prisma || new PrismaClient({ adapter });
 
-if (process.env.NODE_ENV !== "production") {
-  global.__prisma__ = db;
-}
-
-export default db;
-export { db };
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
