@@ -2,5 +2,7 @@
 import { signOut } from "@/lib/auth";
 
 export const signOutAction = async () => {
-  await signOut();
+  await signOut({
+    redirectTo: "/login",
+  });
 };
