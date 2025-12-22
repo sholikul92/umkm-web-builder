@@ -75,14 +75,34 @@ enum WebsiteStatus {
 }
 
 model Website {
-  id          String        @id @default(cuid())
-  userId      String
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  productName String        @map("product_name")
-  slug        String
-  description String
-  imageUrl    String?
-  status      WebsiteStatus @default(DRAFT)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  businessName String @map("business_name")
+  jenisUsaha   String @map("jenis_usaha")
+  lokasi       String
+  whatsapp     String
+
+  slug   String        @unique
+  status WebsiteStatus @default(DRAFT)
+
+  products Product[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model Product {
+  id        String @id @default(cuid())
+  websiteId String @map("website_id")
+
+  namaProduk      String  @map("nama_produk")
+  deskripsiProduk String  @map("deskripsi_produk")
+  fotoProduk      String? @map("foto_produk")
+  harga           Int?
+
+  website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
