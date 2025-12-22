@@ -24,7 +24,7 @@ export async function handleLogin(data: SignInType) {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: "/",
+      redirectTo: "/dashboard",
     });
 
     return {
