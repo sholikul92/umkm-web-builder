@@ -26,6 +26,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             where: {
               email: parsed.data.email,
             },
+            include: {
+              websites: {
+                select: {
+                  id: true,
+                },
+              },
+            },
           });
 
           if (!user) return null;
@@ -39,6 +46,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             name: user.name,
             email: user.email,
             role: user.role,
+            websites: user.websites,
           };
         } catch (error) {
           console.error("Auth error", error);
@@ -48,10 +56,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
+
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false;
+      }
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id!;
         token.role = user.role;
+        token.websites = user.websites;
       }
       return token;
     },
@@ -59,6 +78,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token) {
         session.user.id = token.id;
         session.user.role = token.role;
+        session.user.websites = token.websites;
       }
       return session;
     },
