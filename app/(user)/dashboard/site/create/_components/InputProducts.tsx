@@ -1,33 +1,25 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { Controller } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
+import { WebsiteBaseTypeInput } from "@/app/types/site.types";
+import { useFieldArray } from "react-hook-form";
 
-export default function InputProducts() {
-  const [products, setProducts] = useState([{ id: +new Date(), name: "", description: "", image: null as File | null }]);
+export default function InputProducts({ form }: { form: UseFormReturn<WebsiteBaseTypeInput> }) {
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "products",
+  });
 
   const handleAddProduct = () => {
-    setProducts((prev) => {
-      return [
-        ...prev,
-        {
-          id: +new Date(),
-          name: "",
-          description: "",
-          image: null as File | null,
-        },
-      ];
-    });
-  };
-
-  const handleRemoveFormProduct: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    const buttonId = +e.currentTarget.id.split("-")[1];
-
-    setProducts((prev) => {
-      return prev.filter((product) => product.id !== buttonId);
+    append({
+      name: "",
+      description: "",
+      image: null,
     });
   };
 
@@ -38,30 +30,60 @@ export default function InputProducts() {
         <CardDescription>Tambahkan minimal satu produk atau layanan.</CardDescription>
       </CardHeader>
       <CardContent className='space-y-4'>
-        {products.map((product) => (
-          <FieldGroup key={product.id} className='p-4 rounded-xl border border-gray-300 relative'>
+        {fields.map((field, index) => (
+          <FieldGroup key={field.id} className='p-4 rounded-xl border border-gray-300 relative'>
             <Button
-              id={`btn-${product.id}`}
               type='button'
               size='sm'
               variant='destructive'
-              className='absolute w-fit right-4 top-4 cursor-pointer'
-              onClick={handleRemoveFormProduct}
+              className='absolute w-fit right-4 top-2 cursor-pointer'
+              onClick={() => remove(index)}
             >
               Hapus
             </Button>
-            <FieldLabel htmlFor='nama-produk'>Nama Produk</FieldLabel>
-            <Field>
-              <Input id='nama-produk' type='text' placeholder='Contoh: Bakso' />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor='deskripsi-produk'>Deskripsi Produk</FieldLabel>
-              <Textarea id='deskripsi-produk' placeholder='Deskripsi Produk' rows={5} />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor='photo-produk'>Upload Photo Produk</FieldLabel>
-              <Input id='photo-produk' type='file' placeholder='Upload Photo Produk' />
-            </Field>
+            <Controller
+              control={form.control}
+              name={`products.${index}.name`}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor='nama-produk'>Nama Produk</FieldLabel>
+                  <Input {...field} aria-invalid={fieldState.invalid} id='nama-produk' type='text' placeholder='Contoh: Bakso' />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name={`products.${index}.description`}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor='deskripsi-produk'>Deskripsi Produk</FieldLabel>
+                  <Textarea {...field} aria-invalid={fieldState.invalid} id='deskripsi-produk' placeholder='Deskripsi Produk' rows={5} />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name={`products.${index}.image`}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor='photo-produk'>Upload Photo Produk</FieldLabel>
+                  <Input
+                    accept='image/*'
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] ?? null;
+                      field.onChange(file);
+                    }}
+                    aria-invalid={fieldState.invalid}
+                    id='photo-produk'
+                    type='file'
+                    placeholder='Upload Photo Produk'
+                  />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
           </FieldGroup>
         ))}
       </CardContent>
