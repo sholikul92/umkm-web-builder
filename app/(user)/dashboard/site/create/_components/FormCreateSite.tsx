@@ -97,7 +97,7 @@ export default function FormCreateSite() {
 
   return (
     <form className='space-y-10'>
-      <Card className='bg-white rounded-2xl shadow p-8 border-none'>
+      <Card className='bg-white rounded-2xl shadow px-2 py-6 md:p-8 border-none'>
         <CardHeader>
           <CardTitle>Informasi Bisnis</CardTitle>
           <CardDescription>Data utama bisnis yang akan ditampilkan di website.</CardDescription>
@@ -172,7 +172,7 @@ export default function FormCreateSite() {
 
       <InputProducts form={form} />
 
-      <Card className='bg-white rounded-2xl shadow p-8 border-none'>
+      <Card className='bg-white rounded-2xl shadow px-2 py-6 md:p-8 border-none'>
         <CardHeader>
           <CardTitle>Publikasi Website</CardTitle>
           <CardDescription>Lihat dan Publikasikan Website Anda (Pastikan semua data sudah benar) </CardDescription>
@@ -187,11 +187,24 @@ export default function FormCreateSite() {
             Lihat Website
           </Button>
           <div className='flex flex-col md:flex-row gap-4 justify-end'>
-            <Button type='button' size={"lg"} variant={"secondary"} className='cursor-pointer' onClick={() => handleSubmit("DRAFT")}>
-              Simpan Sebagai Draft
+            <Button
+              type='button'
+              size={"lg"}
+              variant={"secondary"}
+              className='cursor-pointer'
+              onClick={() => handleSubmit("DRAFT")}
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? "..." : "Simpan Sebagai Draft"}
             </Button>
-            <Button type='button' size={"lg"} className='cursor-pointer' onClick={() => handleSubmit("PUBLISHED")}>
-              Publish Website
+            <Button
+              type='button'
+              size={"lg"}
+              className='cursor-pointer'
+              onClick={() => handleSubmit("PUBLISHED")}
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? "..." : "Publish Website"}
             </Button>
           </div>
         </CardContent>
