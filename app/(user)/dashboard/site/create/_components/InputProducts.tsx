@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Controller } from "react-hook-form";
 import type { UseFormReturn } from "react-hook-form";
-import { WebsiteBaseTypeInput } from "@/types/website.types";
+import { FormWebsiteType } from "@/types/website.types";
 import { useFieldArray } from "react-hook-form";
 
-export default function InputProducts({ form }: { form: UseFormReturn<WebsiteBaseTypeInput> }) {
+export default function InputProducts({ form }: { form: UseFormReturn<FormWebsiteType> }) {
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "products",
