@@ -1,15 +1,25 @@
 import { auth } from "./lib/auth.edge";
 import { NextRequest, NextResponse } from "next/server";
 
-export default auth((req) => {
-  const isLoggedIn = !!req.auth;
-  const isOnDashboard = req.nextUrl.pathname.startsWith("/dashboard");
+const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN!;
+const DOMAINS = [ROOT_DOMAIN, "localhost"];
 
-  if (isOnDashboard && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", req.nextUrl.origin));
+export default auth((req) => {
+  const host = req.headers.get("host") || "";
+  const pathname = req.nextUrl.pathname;
+
+  const isRootDomain = DOMAINS.some((domain) => host.startsWith(domain));
+
+  if (isRootDomain) {
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
+  const subdomain = host.split(".")[0];
+
+  const url = req.nextUrl.clone();
+  url.pathname = `/site/${subdomain}${pathname}`;
+
+  return NextResponse.rewrite(url);
 });
 
 export const config = {
@@ -22,7 +32,7 @@ export function middleware(req: NextRequest) {
 
   const subdomain = host.split(".")[0];
 
-  if (subdomain !== "altweb" && subdomain !== "www" && !host.startsWith("localhost")) {
+  if (subdomain !== "altwebsite" && subdomain !== "www" && !host.startsWith("localhost")) {
     url.pathname = `/site/${subdomain}`;
     return NextResponse.rewrite(url);
   }
