@@ -15,17 +15,19 @@ interface Website {
   userId: string;
 }
 
+const BASE_URL = process.env.NODE_ENV === "production" ? "https://altwebsite.vercel.app" : "localhost";
+
 export default function SiteCard({ website }: { website: Website }) {
   const isDraft = website.status === "DRAFT";
-  const url = `https://${website.slug}.altwebsite.vercel.app`;
+  const url = `${BASE_URL}/${website.slug}`;
 
   return (
     <div className='bg-white rounded-2xl shadow p-6 mt-4'>
       <div className='flex justify-between items-start mb-4'>
         <div>
           <h2 className='font-semibold text-lg'>{website.businessName}</h2>
-          <Link href={url} className='text-sm text-gray-500'>
-            {website.slug}.alt.vercell.app
+          <Link href={`/${website.slug}`} className='text-sm text-gray-500'>
+            altwebsite.vercell.app/{website.slug}
           </Link>
         </div>
         {isDraft ? (
