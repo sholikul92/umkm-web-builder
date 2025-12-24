@@ -17,7 +17,7 @@ interface Website {
 
 export default function SiteCard({ website }: { website: Website }) {
   const isDraft = website.status === "DRAFT";
-  const url = `https://${website.slug}.vercel.app`;
+  const url = `https://${website.slug}.altwebsite.vercel.app`;
 
   return (
     <div className='bg-white rounded-2xl shadow p-6 mt-4'>
