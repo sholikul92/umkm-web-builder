@@ -1,4 +1,6 @@
 import { WebsiteStatus } from "@/app/generated/prisma/enums";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface Website {
   businessName: string;
@@ -15,13 +17,16 @@ interface Website {
 
 export default function SiteCard({ website }: { website: Website }) {
   const isDraft = website.status === "DRAFT";
+  const url = `https://${website.slug}.vercel.app`;
 
   return (
     <div className='bg-white rounded-2xl shadow p-6 mt-4'>
       <div className='flex justify-between items-start mb-4'>
         <div>
           <h2 className='font-semibold text-lg'>{website.businessName}</h2>
-          <p className='text-sm text-gray-500'>{website.slug}</p>
+          <Link href={url} className='text-sm text-gray-500'>
+            {website.slug}.alt.vercell.app
+          </Link>
         </div>
         {isDraft ? (
           <span className='text-xs bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full'>Draft</span>
@@ -33,13 +38,17 @@ export default function SiteCard({ website }: { website: Website }) {
       <div className='flex gap-2'>
         {isDraft ? (
           <>
-            <button className='flex-1 bg-indigo-600 text-white py-2 rounded-lg'>Lanjutkan Edit</button>
-            <button className='flex-1 border py-2 rounded-lg'>Preview</button>
+            <Button>Lanjutkan Edit</Button>
+            <Button>Preview</Button>
           </>
         ) : (
           <>
-            <button className='flex-1 bg-indigo-600 text-white py-2 rounded-lg'>Edit Website</button>
-            <button className='flex-1 border py-2 rounded-lg'>Lihat Website</button>
+            <Button variant='outline' className='hover:bg-transparent'>
+              Edit Website
+            </Button>
+            <Link href={url}>
+              <Button>Lihat Website</Button>
+            </Link>
           </>
         )}
       </div>
