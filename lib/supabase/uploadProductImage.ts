@@ -14,7 +14,7 @@ export async function uploadProductImage(file: File) {
     throw new Error("Gagal upload gambar produk");
   }
 
-  const { data } = supabaseServer.storage.from("product-images").getPublicUrl(fileName);
+  const { data } = supabaseServer.storage.from("product_images").getPublicUrl(fileName);
 
   return data.publicUrl;
 }
