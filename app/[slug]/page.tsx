@@ -4,9 +4,11 @@ import WebTemplate from "@/components/templates/WebTemplate";
 import { PublishTemplate } from "@/adapters/website.adapter";
 
 export default async function SitePage({ params }: { params: { slug: string } }) {
-  const website = await prisma.website.findUnique({
+  const { slug } = await params;
+
+  const website = await prisma.website.findFirst({
     where: {
-      slug: params.slug,
+      slug,
       status: "PUBLISHED",
     },
     include: {
