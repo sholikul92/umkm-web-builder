@@ -80,8 +80,8 @@ model Website {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   businessName String @map("business_name")
-  jenisUsaha   String @map("jenis_usaha")
-  lokasi       String
+  businessType String @map("business_type")
+  location     String
   whatsapp     String
 
   slug   String        @unique
@@ -97,10 +97,10 @@ model Product {
   id        String @id @default(cuid())
   websiteId String @map("website_id")
 
-  namaProduk      String  @map("nama_produk")
-  deskripsiProduk String  @map("deskripsi_produk")
-  fotoProduk      String? @map("foto_produk")
-  harga           Int?
+  name        String  @map("name")
+  description String  @map("description")
+  imageUrl    String? @map("image_url")
+  harga       Int?
 
   website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
 
