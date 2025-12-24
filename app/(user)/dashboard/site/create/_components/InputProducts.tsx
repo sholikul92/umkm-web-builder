@@ -24,7 +24,7 @@ export default function InputProducts({ form }: { form: UseFormReturn<FormWebsit
   };
 
   return (
-    <Card className='bg-white rounded-2xl shadow p-8 border-none'>
+    <Card className='bg-white rounded-2xl shadow px-2 py-6 md:p-8 border-none'>
       <CardHeader>
         <CardTitle>Produk / Layanan</CardTitle>
         <CardDescription>Tambahkan minimal satu produk atau layanan.</CardDescription>

@@ -23,7 +23,7 @@ export default function SiteCard({ website }: { website: Website }) {
 
   return (
     <div className='bg-white rounded-2xl shadow p-6 mt-4'>
-      <div className='flex justify-between items-start mb-4'>
+      <div className='flex flex-col md:flex-row gap-2 justify-between items-start mb-4'>
         <div>
           <h2 className='font-semibold text-lg'>{website.businessName}</h2>
           <Link href={`/${website.slug}`} className='text-sm text-gray-500'>
