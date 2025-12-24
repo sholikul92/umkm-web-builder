@@ -6,7 +6,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <>
       <main>{children}</main>
-      <Toaster />
+      <Toaster position='top-center' />
     </>
   );
 }

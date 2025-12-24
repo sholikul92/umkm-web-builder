@@ -4,7 +4,7 @@ import { Toaster } from "sonner";
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Toaster />
+      <Toaster position='top-center' />
       <main>{children}</main>
     </>
   );
