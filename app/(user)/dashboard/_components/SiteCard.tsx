@@ -1,6 +1,8 @@
+"use client";
 import { WebsiteStatus } from "@/app/generated/prisma/enums";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface Website {
   businessName: string;
@@ -45,7 +47,7 @@ export default function SiteCard({ website }: { website: Website }) {
           </>
         ) : (
           <>
-            <Button variant='outline' className='hover:bg-transparent'>
+            <Button variant='outline' className='hover:bg-transparent cursor-pointer' onClick={() => toast.info("Fitur ini belum tersedia.")}>
               Edit Website
             </Button>
             <Link href={url}>
