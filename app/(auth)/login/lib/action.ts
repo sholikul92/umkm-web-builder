@@ -1,9 +1,9 @@
 "use server";
 
-import { signInSchema } from "@/app/schemas/auth.schema";
+import { signInSchema } from "@/schemas/auth.schema";
 import { AuthError } from "next-auth";
 import { signIn } from "@/lib/auth";
-import { SignInType } from "@/app/types/auth.types";
+import { SignInType } from "@/types/auth.types";
 import { z } from "zod";
 
 export async function handleLogin(data: SignInType) {

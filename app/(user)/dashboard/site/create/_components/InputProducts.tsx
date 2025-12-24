@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Controller } from "react-hook-form";
 import type { UseFormReturn } from "react-hook-form";
-import { WebsiteBaseTypeInput } from "@/app/types/site.types";
+import { WebsiteBaseTypeInput } from "@/types/website.types";
 import { useFieldArray } from "react-hook-form";
 
 export default function InputProducts({ form }: { form: UseFormReturn<WebsiteBaseTypeInput> }) {
@@ -19,7 +19,7 @@ export default function InputProducts({ form }: { form: UseFormReturn<WebsiteBas
     append({
       name: "",
       description: "",
-      image: null,
+      imageUrl: null,
     });
   };
 
@@ -65,7 +65,7 @@ export default function InputProducts({ form }: { form: UseFormReturn<WebsiteBas
             />
             <Controller
               control={form.control}
-              name={`products.${index}.image`}
+              name={`products.${index}.imageUrl`}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor='photo-produk'>Upload Photo Produk</FieldLabel>

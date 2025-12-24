@@ -1,33 +1,10 @@
 import AvailableStateHero from "./AvailableStateHero";
 import SiteCard from "./SiteCard";
+import { fetchUserWebsite } from "../lib/action";
 
-type WebsiteStatus = "draft" | "published";
+export default async function DashboardSection() {
+  const websites = await fetchUserWebsite();
 
-export interface Website {
-  id: string;
-  name: string;
-  subdomain: string;
-  status: WebsiteStatus;
-  progress?: number; // only for draft
-}
-
-const websites: Website[] = [
-  {
-    id: "1",
-    name: "Toko Kopi Nusantara",
-    subdomain: "kopinusantara.altweb.site",
-    status: "draft",
-    progress: 70,
-  },
-  {
-    id: "2",
-    name: "Laundry Bersih Jaya",
-    subdomain: "laundryjaya.altweb.site",
-    status: "published",
-  },
-];
-
-export default function DashboardSection() {
   return (
     <>
       <AvailableStateHero />

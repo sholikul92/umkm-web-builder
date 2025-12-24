@@ -1,14 +1,27 @@
-import type { Website } from "./DashboardSection";
+import { WebsiteStatus } from "@/app/generated/prisma/enums";
+
+interface Website {
+  businessName: string;
+  businessType: string;
+  location: string;
+  whatsapp: string;
+  id: string;
+  slug: string;
+  status: WebsiteStatus;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+}
 
 export default function SiteCard({ website }: { website: Website }) {
-  const isDraft = website.status === "draft";
+  const isDraft = website.status === "DRAFT";
 
   return (
-    <div className='bg-white rounded-2xl shadow p-6'>
+    <div className='bg-white rounded-2xl shadow p-6 mt-4'>
       <div className='flex justify-between items-start mb-4'>
         <div>
-          <h2 className='font-semibold text-lg'>{website.name}</h2>
-          <p className='text-sm text-gray-500'>{website.subdomain}</p>
+          <h2 className='font-semibold text-lg'>{website.businessName}</h2>
+          <p className='text-sm text-gray-500'>{website.slug}</p>
         </div>
         {isDraft ? (
           <span className='text-xs bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full'>Draft</span>
@@ -16,12 +29,6 @@ export default function SiteCard({ website }: { website: Website }) {
           <span className='text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full'>Published</span>
         )}
       </div>
-
-      {isDraft && website.progress !== undefined && (
-        <div className='w-full bg-gray-200 rounded-full h-2 mb-4'>
-          <div className='bg-indigo-600 h-2 rounded-full' style={{ width: `${website.progress}%` }} />
-        </div>
-      )}
 
       <div className='flex gap-2'>
         {isDraft ? (

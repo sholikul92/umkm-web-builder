@@ -1,13 +1,15 @@
-import { auth } from "@/lib/auth";
+import { fetchUserWebsite } from "./lib/action";
 import DashboardSection from "./_components/DashboardSection";
 import EmptyDashboard from "./_components/EmptyDashboard";
+import SiteHeader from "./_components/SiteHeader";
 
 export default async function DashboardPage() {
-  const session = await auth();
+  const websites = await fetchUserWebsite();
 
-  const { user } = session!;
-
-  const lengthWebsite = user.websites.length;
-
-  return <>{lengthWebsite === 0 ? <EmptyDashboard /> : <DashboardSection />}</>;
+  return (
+    <>
+      <SiteHeader />
+      <div className='bg-gray-50 py-8 px-4'>{websites.length === 0 ? <EmptyDashboard /> : <DashboardSection />}</div>
+    </>
+  );
 }

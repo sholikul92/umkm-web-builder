@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import { WebsiteBaseTypeInput } from "../types/site.types";
+import { FormWebsiteType } from "@/types/website.types";
 
 type PreviewWebsiteState = {
-  data: WebsiteBaseTypeInput | null;
-  setPreview: (data: WebsiteBaseTypeInput) => void;
+  data: FormWebsiteType | null;
+  setPreview: (data: FormWebsiteType) => void;
   clearPreview: () => void;
 };
 

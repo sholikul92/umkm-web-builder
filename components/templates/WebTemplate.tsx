@@ -1,14 +1,14 @@
 import Image from "next/image";
-import { WebsiteBaseTypeInput } from "../types/site.types";
+import { WebsiteTemplateData } from "../../types/website.types";
 
-export default function WebTemplate({ data }: { data: WebsiteBaseTypeInput }) {
+export default function WebTemplate({ data }: { data: WebsiteTemplateData }) {
   return (
     <div className='font-sans text-gray-900'>
       <section className='bg-linear-to-br from-indigo-600 to-purple-600 text-white'>
         <div className='max-w-6xl mx-auto px-6 py-24 text-center'>
           <h1 className='text-4xl md:text-5xl font-bold leading-tight'>{data.businessName}</h1>
           <p className='mt-4 text-lg opacity-90'>
-            {data.typeofBusiness} · {data.location}
+            {data.businessType} · {data.location}
           </p>
 
           <a
@@ -35,7 +35,7 @@ export default function WebTemplate({ data }: { data: WebsiteBaseTypeInput }) {
             {data.products.map((product, index) => (
               <div key={index} className='bg-white rounded-2xl shadow-sm hover:shadow-md transition p-6 space-y-2'>
                 <div className='w-full h-48 overflow-hidden'>
-                  <Image src={URL.createObjectURL(product.image!)} alt='image' width={200} height={200} className='w-full h-fit' />
+                  <Image src={product.imageUrl || "/template.jpg"} alt='image' width={200} height={200} className='w-full h-fit' />
                 </div>
 
                 <h3 className='font-semibold text-lg mb-2'>{product.name}</h3>

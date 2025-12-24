@@ -1,8 +1,9 @@
 "use client";
-import { usePreviewWebsite } from "@/app/store/usePreviewWebsite";
-import WebTemplate from "@/app/templates/WebTemplate";
+import { usePreviewWebsite } from "@/store/usePreviewWebsite";
+import WebTemplate from "@/components/templates/WebTemplate";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { PreviewTemplate } from "@/adapters/website.adapter";
 
 export default function GeneratedWebsitePage() {
   const data = usePreviewWebsite((state) => state.data);
@@ -31,7 +32,7 @@ export default function GeneratedWebsitePage() {
       </div>
 
       <div className='pt-10'>
-        <WebTemplate data={data} />
+        <WebTemplate data={PreviewTemplate(data)} />
       </div>
     </>
   );

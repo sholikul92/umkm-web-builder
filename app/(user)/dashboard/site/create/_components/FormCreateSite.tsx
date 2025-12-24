@@ -8,26 +8,29 @@ import { Button } from "@/components/ui/button";
 import InputProducts from "./InputProducts";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { websiteBaseSchema } from "@/app/schemas/site.schema";
-import type { WebsiteBaseTypeInput } from "@/app/types/site.types";
-import { usePreviewWebsite } from "@/app/store/usePreviewWebsite";
+import { formWebsiteSchema } from "@/schemas/website.form.schema";
+import type { FormWebsiteType } from "@/types/website.types";
+import { usePreviewWebsite } from "@/store/usePreviewWebsite";
 import { useRouter } from "next/navigation";
+import { handlePublishWebsite } from "../lib/action";
+import { WebsiteStatus } from "@/app/generated/prisma/enums";
+import { toast } from "sonner";
 
 export default function FormCreateSite() {
   const data = usePreviewWebsite((state) => state.data);
 
-  const form = useForm<WebsiteBaseTypeInput>({
-    resolver: zodResolver(websiteBaseSchema),
+  const form = useForm<FormWebsiteType>({
+    resolver: zodResolver(formWebsiteSchema),
     defaultValues: data ?? {
       businessName: "",
       location: "",
       whatsapp: "",
-      typeofBusiness: "",
+      businessType: "",
       products: [
         {
           name: "",
           description: "",
-          image: null,
+          imageUrl: null,
         },
       ],
     },
@@ -49,10 +52,51 @@ export default function FormCreateSite() {
     router.push("/dashboard/site/preview");
   };
 
-  const onSubmit = (data: WebsiteBaseTypeInput) => {};
+  const handleSubmit = async (status: WebsiteStatus) => {
+    const valid = await form.trigger();
+    if (!valid) return;
+
+    const values = form.getValues();
+    const formData = new FormData();
+
+    formData.append("businessName", values.businessName);
+    formData.append("businessType", values.businessType);
+    formData.append("whatsapp", values.whatsapp);
+    formData.append("location", values.location);
+    formData.append(
+      "products",
+      JSON.stringify(
+        values.products.map((product) => ({
+          name: product.name,
+          description: product.description,
+        }))
+      )
+    );
+
+    values.products.forEach((p, index) => {
+      if (p.imageUrl) {
+        formData.append(`product_image_${index}`, p.imageUrl);
+      }
+    });
+
+    const response = await handlePublishWebsite(formData, status);
+    if (response.errors) {
+      console.log("Error validasi ditemukan:", response.errors);
+      Object.entries(response.errors).forEach(([field, messages]) => {
+        form.setError(field as keyof FormWebsiteType, {
+          message: messages?.[0],
+        });
+      });
+    }
+
+    if (response?.success) {
+      toast.success("Pembuatan Website Berhasil");
+      router.push("/dashboard");
+    }
+  };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-10'>
+    <form className='space-y-10'>
       <Card className='bg-white rounded-2xl shadow p-8 border-none'>
         <CardHeader>
           <CardTitle>Informasi Bisnis</CardTitle>
@@ -80,7 +124,7 @@ export default function FormCreateSite() {
                 )}
               />
               <Controller
-                name='typeofBusiness'
+                name='businessType'
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
@@ -143,10 +187,10 @@ export default function FormCreateSite() {
             Lihat Website
           </Button>
           <div className='flex flex-col md:flex-row gap-4 justify-end'>
-            <Button size={"lg"} variant={"secondary"} className='cursor-pointer'>
+            <Button type='button' size={"lg"} variant={"secondary"} className='cursor-pointer' onClick={() => handleSubmit("DRAFT")}>
               Simpan Sebagai Draft
             </Button>
-            <Button size={"lg"} className='cursor-pointer'>
+            <Button type='button' size={"lg"} className='cursor-pointer' onClick={() => handleSubmit("PUBLISHED")}>
               Publish Website
             </Button>
           </div>

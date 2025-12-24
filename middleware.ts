@@ -1,5 +1,5 @@
 import { auth } from "./lib/auth.edge";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export default auth((req) => {
   const isLoggedIn = !!req.auth;
@@ -15,3 +15,17 @@ export default auth((req) => {
 export const config = {
   matcher: ["/dashboard/:path*"],
 };
+
+export function middleware(req: NextRequest) {
+  const host = req.headers.get("host") || "";
+  const url = req.nextUrl.clone();
+
+  const subdomain = host.split(".")[0];
+
+  if (subdomain !== "altweb" && subdomain !== "www" && !host.startsWith("localhost")) {
+    url.pathname = `/site/${subdomain}`;
+    return NextResponse.rewrite(url);
+  }
+
+  return NextResponse.next();
+}

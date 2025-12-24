@@ -2,9 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import { signUpSchema } from "@/app/schemas/auth.schema";
-import { hashPassword } from "@/app/utils/hashAndComparePassword";
-import { SignUpType } from "@/app/types/auth.types";
+import { signUpSchema } from "@/schemas/auth.schema";
+import { hashPassword } from "@/utils/hashAndComparePassword";
+import { SignUpType } from "@/types/auth.types";
 
 export async function handleRegister(data: SignUpType) {
   const validateFields = signUpSchema.safeParse(data);
