@@ -88,7 +88,7 @@ export default function InputProducts({ form }: { form: UseFormReturn<FormWebsit
         ))}
       </CardContent>
       <CardFooter>
-        <Button type='button' onClick={handleAddProduct} className='cursor-pointer'>
+        <Button variant='outline' type='button' onClick={handleAddProduct} className='w-full border border-dashed cursor-pointer hover:bg-gray-50'>
           + Tambah Produk Lainnya
         </Button>
       </CardFooter>
